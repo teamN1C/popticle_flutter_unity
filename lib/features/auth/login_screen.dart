@@ -62,7 +62,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     if (result.containsKey("access_token")) {
                       tokenService.saveAccessToken(result["access_token"]);
                       tokenService.saveRefreshToken(result["refresh_token"]);
-                      Navigator.of(context).pushReplacementNamed("/home");
+                      final userName = result["name"] ?? "unknown";
+                      final userEmail = result["email"] ?? "";
+                      Navigator.of(context).pushReplacementNamed("/home", arguments: {
+                        'name': userName,
+                        'email': userEmail,
+                      });
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text("로그인 실패!")),

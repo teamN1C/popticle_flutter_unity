@@ -53,7 +53,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
           children: [
             Image.asset(
               'asset/img/logo/logo.png',
-              width: MediaQuery.of(context).size.width / 2,
+              width: MediaQuery.of(context).size.width,
             ),
             const SizedBox(height: 16.0),
             CircularProgressIndicator(

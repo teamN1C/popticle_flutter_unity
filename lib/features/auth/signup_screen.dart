@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:popticle_flutter_unity/providers/auth_provider.dart';
 import 'package:popticle_flutter_unity/providers/token_provider.dart';
+import 'package:popticle_flutter_unity/common/layouts/default_layout.dart';
 
 class SignupScreen extends ConsumerWidget {
   final TextEditingController nameController = TextEditingController();
@@ -12,9 +13,9 @@ class SignupScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authService = ref.watch(authServiceProvider);
 
-    return Scaffold(
-      appBar: AppBar(title: Text("Sign Up")),
-      body: Padding(
+    return DefaultLayout(
+      title: "Sign Up", // DefaultLayout의 title 속성에 "Sign Up"을 전달
+      child: Padding(
         padding: EdgeInsets.all(20.0),
         child: Column(
           children: [
@@ -51,7 +52,7 @@ class SignupScreen extends ConsumerWidget {
                       // Debug log for successful token save
                       print("Tokens saved successfully!");
 
-                      Navigator.of(context).pushReplacementNamed("/home");
+                      Navigator.of(context).pushNamed("/home");
                     } else {
                       print("Tokens are missing in the response!");
                       ScaffoldMessenger.of(context).showSnackBar(
