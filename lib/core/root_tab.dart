@@ -13,8 +13,7 @@ class RootTab extends StatefulWidget {
   State<RootTab> createState() => _RootTabState();
 }
 
-class _RootTabState extends State<RootTab>
-    with SingleTickerProviderStateMixin {
+class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
   late TabController controller;
 
   int index = 0;
@@ -35,8 +34,8 @@ class _RootTabState extends State<RootTab>
     super.dispose();
   }
 
-  void tabListener(){
-    setState((){
+  void tabListener() {
+    setState(() {
       index = controller.index;
     });
   }
@@ -45,38 +44,38 @@ class _RootTabState extends State<RootTab>
   Widget build(BuildContext context) {
     return DefaultLayout(
       title: 'POPTICLE',
-      child: TabBarView(
-        physics: NeverScrollableScrollPhysics(),
-        controller: controller,
-        children: [
-          HomeScreen(),      // 홈 화면 위젯
-          // PopticleScreen(),  // Popticle 화면 위젯
-          // MyPageScreen(),    // 마이페이지 화면 위젯
+      bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: PRIMARY_COLOR,
+        unselectedItemColor: BODY_TEXT_COLOR,
+        selectedFontSize: 10,
+        unselectedFontSize: 10,
+        type: BottomNavigationBarType.fixed,
+        onTap: (int index) {
+          controller.animateTo(index);
+        },
+        currentIndex: index,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_outlined),
+            label: 'HOME',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.camera),
+            label: 'POPTICLE',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outlined),
+            label: 'MYPAGE',
+          ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-          selectedItemColor: PRIMARY_COLOR,
-          unselectedItemColor: BODY_TEXT_COLOR,
-          selectedFontSize: 10,
-          unselectedFontSize: 10,
-          type: BottomNavigationBarType.fixed,
-          onTap: (int index) {
-            controller.animateTo(index);
-          },
-          currentIndex: index,
-          items: [
-      BottomNavigationBarItem(
-        icon: Icon(Icons.home_outlined),
-        label: 'HOME',
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.camera),
-      label: 'POPTICLE',
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.person_outlined),
-      label: 'MYPAGE',
-          ),
+      child: TabBarView(
+        physics: const NeverScrollableScrollPhysics(),
+        controller: controller,
+        children: const [
+          MyHomePage(playerName: "unknown"), // 홈 화면 위젯
+          // PopticleScreen(),  // Popticle 화면 위젯
+          // MyPageScreen(),    // 마이페이지 화면 위젯
         ],
       ),
     );

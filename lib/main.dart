@@ -8,7 +8,7 @@ import 'package:popticle_flutter_unity/features/home/home_screen.dart';
 
 void main() {
   runApp(
-    ProviderScope(
+    const ProviderScope(
       child: _App(),
     ),
   );
@@ -28,9 +28,9 @@ class _App extends StatelessWidget {
       home: SplashScreen(),
       // 다른 경로들을 정의
       routes: {
-        '/login': (context) => LoginScreen(),
+        '/login': (context) => const LoginScreen(),
         '/signup': (context) => SignupScreen(),
-        '/home': (context) => HomeScreen(),
+        '/home': (context) => const MyHomePage(playerName: "unknown"),
         // ... 기타 경로들
       },
     );

@@ -1,69 +1,76 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:popticle_flutter_unity/common/layouts/default_layout.dart';
+// ignore_for_file: prefer_const_constructors
 
-class HomeScreen extends ConsumerWidget {
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'unity_screen.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+class MyHomePage extends StatefulWidget {
+  final String playerName;
+
+  const MyHomePage({Key? key, required this.playerName}) : super(key: key);
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return DefaultLayout(
-      title: "Home",  // DefaultLayout의 title에 "Home" 설정
-      child: Center(
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  @override
+  Widget build(BuildContext context) {
+    // Here, you implement the widget structure for your home screen
+    return Scaffold(
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'Welcome to POPTICLE :D',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.pink[200]),
-            ),
-            SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                // Add some functionality or navigate to another screen
-              },
-              child: Text('Explore Features'),
-            ),
-          ],
-        ),
-      ),
-      drawer: Drawer(
-        child: ListView(
-          children: <Widget>[
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text(
-                'Menu',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(
+                  Colors.pink.shade100,
                 ),
               ),
-            ),
-            ListTile(
-              leading: Icon(Icons.message),
-              title: Text('Messages'),
-              onTap: () {
-                // Handle navigation to messages page
+              onPressed: () {
+                requestCameraPermission(widget.playerName.toString());
               },
-            ),
-            ListTile(
-              leading: Icon(Icons.account_circle),
-              title: Text('Profile'),
-              onTap: () {
-                // Handle navigation to profile page
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Settings'),
-              onTap: () {
-                // Handle navigation to settings page
-              },
+              child: Text(
+                "launch the popticle right now!",
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  requestCameraPermission(String playerName) async {
+    /// status can either be: granted, denied, restricted or permanentlyDenied
+    var status = await Permission.camera.status;
+
+    if (status.isGranted) {
+      print("$playerName + Permission is granted");
+      if (!mounted) return;
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => UnityDemoScreen(playerName: playerName),
+        ),
+      );
+    } else if (status.isDenied) {
+      // We didn't ask for permission yet or the permission has been denied before but not permanently.
+      if (await Permission.camera.request().isGranted) {
+        // Either the permission was already granted before or the user just granted it.
+        if (!mounted) return;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => UnityDemoScreen(playerName: playerName),
+          ),
+        );
+        print("$playerName + Permission was granted");
+      }
+    }
   }
 }
